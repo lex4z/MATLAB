@@ -67,14 +67,11 @@ function a = matrix(n,alf,type)
     end
 
     if type == 7
+        if alf>0.01 alf=-alf;
+        end
         for i=1:n
             for j=1:n
-                if i==j 
-                    a(i,j)=1/((n-i+1)*(i+1));
-                elseif i>j
-                    a(i,j)=i*(n-j);
-                else a(i,j)=0;
-                end
+                a(i,j)=exp(alf*i*j);        
             end
         end
     end
