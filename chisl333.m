@@ -1,0 +1,9 @@
+N = 10;
+A = rand(N);
+x0 = rand(N,1);
+b = A*x0;
+x = A\b;
+err = norm(x-xo)/norm(x0);
+r = norm(A*x-b);
+ob = cond(A);
+err_est = ob*r/norm(b);

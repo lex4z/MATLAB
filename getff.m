@@ -1,12 +1,12 @@
 function ans = getff(x,n,epsy)
     if n == 1
-        f = @(x) sqrt(x);
+        f = @(x) exp(x);
     end
     if n == 2
-        f = @(x)sin(x)./x;
+        f = @(x) cos(x);
     end
     if n == 3
-        f = @(x) abs(x)+cos(x)*2;
+        f = @(x) abs(x);
     end
     if n == 4
         f = @(x) 100*x.^-1;
