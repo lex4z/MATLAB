@@ -70,3 +70,11 @@ octave-workspace
 # Generated excel tables
 *.xlsx
 # End of https://www.toptal.com/developers/gitignore/api/macos,matlab
+matrix1.m
+matrix2.m
+matrix3.m
+matrix4.m
+matrix5.m
+matrix6.m
+matrix7.m
+matrix8.m
