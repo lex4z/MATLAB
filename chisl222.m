@@ -18,11 +18,8 @@ B = [ 5, 2, 6,-40,40, 90];
 clear RES;
 
 f = f1;
-
 for i = 1:6
-    %at = -(randperm(9,1)+1); %randperm(N = макс. значение, n = кол-во чисел(<= N))
-    %bt = randperm(9,1)+1;    %генерирует n чисел в пределах от 1 до N включительно
-
+    
     epsf = 1e-1;
 
     if i > 3
@@ -95,6 +92,7 @@ for i = 1:12
     for j = 1:5
         xk = XK(i); %XK(i-o);  %xk = XK(mod(i,7) + floor(i/7));%чтобы дважды идти от 1 до 6
         
+
         for k = 1:1e5
             if df(xk) == 0
                 disp("ПРОИЗВОДНАЯ НОЛЬ, иди на")
@@ -120,8 +118,6 @@ for i = 1:12
         RES(l,5) = f(xk);
         RES(l,6) = err;
         RES(l,7) = k;
-
-        %RES(l,8) = k;
 
         epsf = epsf^2;%*1e-2;
         l = l+1;
@@ -169,8 +165,7 @@ for i = 1:12
             xk1 = xk1 - f(xk1)*(xk1-xk0)/(f(xk1)-f(xk0));
             xk0 = buff;
         end
-        %err = abs(x0-c) * mod(ceil(i/3),2) + floor((i-1)/3) * abs(x01-c); %да
-
+        
         err = abs(x0-xk1);
         
         if i > 6
@@ -187,7 +182,7 @@ for i = 1:12
         RES(l,8) = k;
         
 
-        epsf = epsf^2;%*1e-2;
+        epsf = epsf^2;
         l = l+1;
     end
 end
@@ -247,7 +242,7 @@ for i = 1:6
             
             l = l+1;
         end
-        epsf = epsf^2;%*1e-2;
+        epsf = epsf^2;
     end
 end
 
