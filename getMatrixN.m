@@ -1,4 +1,4 @@
-function a = getMatrix(n,alf,type)
+function a = getMatrixN(n,alf,type)
 
     if type == 1
         for i=1:n
