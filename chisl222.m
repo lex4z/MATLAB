@@ -78,7 +78,6 @@ f = f1;
 o = 0;
 l = 1;
 for i = 1:12
-
     epsf = 1e-1;  
 
     if i > 6
@@ -87,12 +86,9 @@ for i = 1:12
         %o = 6;
     end
     
-    
-
     for j = 1:5
         xk = XK(i); %XK(i-o);  %xk = XK(mod(i,7) + floor(i/7));%чтобы дважды идти от 1 до 6
         
-
         for k = 1:1e5
             if df(xk) == 0
                 disp("ПРОИЗВОДНАЯ НОЛЬ, иди на")
