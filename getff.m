@@ -6,7 +6,7 @@ function ans = getff(x,n,epsy)
         f = @(x) cos(x);
     end
     if n == 3
-        f = @(x)cosh(x);
+        f = @(x) abs(x) + cos(x/5)*2;
     end
     if n == 4
         f = @(x) 100*x.^-1;
