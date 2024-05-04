@@ -25,10 +25,14 @@ coding_table = [
     1 1 1 0 1  %1111
 ];
 
-data_blocks = reshape(data, 4, [])'; %разбиение исходных данных на блоки по 5 бит
+if mod(size(data,1),4) > 0
+    data = [zeros(4-mod(size(data,1),4),1);data]; %добавление в начало незначущих нулей для разбиения по 4
+end
 
-encoded_data_blocks = coding_table(bin2dec(compose("%d%d%d%d",data_blocks)) + 1,:); % 
+data_blocks = reshape(data, 4, [])'; %разбиение исходных данных на блоки по 4 бита
 
-encoded_data = reshape(encoded_data_blocks',ceil(size(data)/4)*5,[]);
+encoded_data_blocks = coding_table(bin2dec(compose("%d%d%d%d",data_blocks)) + 1,:); %преобразование блоков с длиной 4 в блоки с длиной 5 с помощью таблицы кодирования
+
+encoded_data = reshape(encoded_data_blocks',ceil(size(data)/4)*5,[]); %преобразование блоков по 5 в обычный одномерный массив
 
 end
