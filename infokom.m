@@ -14,20 +14,22 @@ recieved_data = encoded_mtl3_data + noise;
 
 recieved_data = recieved_data * 0.8;
 
-t = 1:size(encoded_mtl3_data,1);
-t = repelem(t,10);
+t = 1:100*length(encoded_mtl3_data);
+%t = repelem(t,10);
 
-f = zeros(length(t),1);
-for i = 1:length(t)
-    f(i) = encoded_mtl3_data(t(i));
-end
+f = repelem(encoded_mtl3_data,100);
+%for i = 1:length(t)
+    %f(i) = encoded_mtl3_data(t(i));
+%end
 
-f = f + randn(length(t),1)/10;
+f = f + randn(length(t),1)/8;
 f = f * 0.8;
 
-plot(t(2:end),f(1:end-1))
-xlim([0 50])
-ylim([-1 1])
+plot(t,f)
+hold on
+plot(t,repelem(encoded_mtl3_data,100))
+xlim([0 2500])
+ylim([-1.2 1.2])
 
 decoded_mtl3_data = mtl3(recieved_data,"decode");
 
