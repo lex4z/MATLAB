@@ -14,7 +14,7 @@ t = 1:dt*length(encoded_mtl3_data);
 
 f = repelem(encoded_mtl3_data,dt);
 
-f = f + randn(length(t),1)/5;
+f = f + randn(length(t),1)/5;%добавление шума
 f = f * 0.8;
 
 plot(t,f)
