@@ -1,5 +1,5 @@
 %bitrate = 100e6; 
-%baudrate = 125e6; %частота передатчика в Гц
+dbaudrate = 125e6; %частота передатчика в Гц
 
 data = randi([0 1], 1000, 1); %генерация данных для передачи
 
@@ -13,6 +13,21 @@ noise = randn(size(encoded_mtl3_data))/15;
 recieved_data = encoded_mtl3_data + noise;
 
 recieved_data = recieved_data * 0.8;
+
+t = 1:size(encoded_mtl3_data,1);
+t = repelem(t,10);
+
+f = zeros(length(t),1);
+for i = 1:length(t)
+    f(i) = encoded_mtl3_data(t(i));
+end
+
+f = f + randn(length(t),1)/10;
+f = f * 0.8;
+
+plot(t(2:end),f(1:end-1))
+xlim([0 50])
+ylim([-1 1])
 
 decoded_mtl3_data = mtl3(recieved_data,"decode");
 
