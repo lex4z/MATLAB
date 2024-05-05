@@ -7,7 +7,7 @@ encoded4b5b_data = coding4b5b(data,"encode");
 
 encoded_mtl3_data = mtl3(encoded4b5b_data,"encode");
 
-noise = randn(size(encoded_mtl3_data))/100;
+noise = randn(size(encoded_mtl3_data))/15;
 
 %иммитация шума и потерь
 recieved_data = encoded_mtl3_data + noise;
@@ -107,5 +107,6 @@ elseif type == "decode"
 else
     disp("incorrect type argument")
 end
+
 end
 
