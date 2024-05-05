@@ -114,10 +114,6 @@ if type == "encode"
         processed_data = [processed_data;t(l)];
     end
 elseif type == "decode"
-    data(data>0.5*max(data)) = 1;
-    data(data<-0.5*max(data)) = -1;
-    data(data>=-0.5*max(data) & data<=0.5*max(data)) = 0;
-    
     processed_data = [];
     prev_level = -1;
     
