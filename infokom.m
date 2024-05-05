@@ -7,29 +7,37 @@ encoded4b5b_data = coding4b5b(data,"encode");
 
 encoded_mtl3_data = mtl3(encoded4b5b_data,"encode");
 
-noise = randn(size(encoded_mtl3_data))/15;
-
 %иммитация шума и потерь
-recieved_data = encoded_mtl3_data + noise;
+dt = 100; %длина одного бита
 
-recieved_data = recieved_data * 0.8;
+t = 1:dt*length(encoded_mtl3_data);
 
-t = 1:100*length(encoded_mtl3_data);
-%t = repelem(t,10);
+f = repelem(encoded_mtl3_data,dt);
 
-f = repelem(encoded_mtl3_data,100);
-%for i = 1:length(t)
-    %f(i) = encoded_mtl3_data(t(i));
-%end
-
-f = f + randn(length(t),1)/8;
+f = f + randn(length(t),1)/5;
 f = f * 0.8;
 
 plot(t,f)
 hold on
-plot(t,repelem(encoded_mtl3_data,100))
-xlim([0 2500])
+plot(t,repelem(encoded_mtl3_data,dt))
+xlim([0 25*dt])
 ylim([-1.2 1.2])
+hold off
+
+recieved_data = [];
+
+for i = 1:dt:length(f)
+    average_value_per_bit = mean(f(i:i+dt-1));
+    if average_value_per_bit > 0.5
+        recieved_data = [recieved_data;1];
+    elseif average_value_per_bit < -0.5
+        recieved_data = [recieved_data;-1];
+    else
+        recieved_data = [recieved_data;0];
+    end
+end
+
+%disp(prod(encoded_mtl3_data == recieved_data))
 
 decoded_mtl3_data = mtl3(recieved_data,"decode");
 
