@@ -19,8 +19,8 @@ f = f * 0.8;
 
 plot(t,f)
 hold on
-%plot(t,repelem(encoded_mtl3_data,dt))
-xlim([0 25*dt])
+plot(t,repelem(encoded_mtl3_data,dt))
+xlim([0 50*dt])
 ylim([-1.2 1.2])
 hold off
 
