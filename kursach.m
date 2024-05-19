@@ -3,21 +3,21 @@ clc
 f = @(x,y) x.^3 + x.*y + y.^3 -7./(x.*y);
 f2 = @(x) x.^2 - x + sqrt(x);
 
-%integral2(f,1,6,2,4.5)
-%double_simpson(f,1,6,2,4.5,10000,10000)
-integral(f2,0,5)
-simpson(f2,0,5,1e3)
+integral2(f,1,6,2,4.5)
+double_simpson(f,1,6,2,4.5,100,100)
+%integral(f2,0,5)
+%simpson(f2,0,5,1e3)
 
-function result = simpson(f,a,b,n)
+function result = simpson(f,a,b,n,y)
 n = n + mod(n,2);
 h = (b-a)/n;
 
 s = 0;
-t1 = f(a);
+t1 = f(a,y);
 
 for i = 1:2:n-1
-    t2 = f(a+i*h);
-    t3 = f(a+(i+1)*h);
+    t2 = f(a+i*h,y);
+    t3 = f(a+(i+1)*h,y);
     s = s + t1 + 4*t2 + t3;
     t1 = t3;
 end
@@ -25,27 +25,22 @@ end
 result = h/3*s;
 end
 
-function result = double_simpson(f, a, b, c, d, m, n)
+function result = double_simpson(f, a, b, c, d, n, m)
 m = m + mod(m,2);
-n = n + mod(n,2);
 
-h = (b-a)/m;
-k = (d-c)/n;
+k = (d-c)/m;
 
-s = 0;
-x = a;
-y = c;
+g = 0;
+l1 = simpson(f,a,b,n,c);
 
-for i = 1:m/2
-    l1 = f(x,c) + f(x,d);
-    for j = 1:n-1
-        y = y + k;
-        
-    end
-
+for j = 1:2:m-1
+    l2 = simpson(f,a,b,n,c+j*k);
+    l3 = simpson(f,a,b,n,c+(j+1)*k);
+    g = g + l1 + 4*l2 + l3;
+    l1 = l3;
 end
 
-result = s*k/3;
+result = g*k/3;
 
 end
 
