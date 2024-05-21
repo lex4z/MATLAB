@@ -11,14 +11,14 @@ f2 = @(x,y) x.^2 - x + sqrt(x);
 
 fprintf("%f\n",integral2(f,a,b,c,d))
 fprintf("%f\n",double_simpson(f,a,b,c,d,100,100))
-%fprintf("%f\n",double_trapezoid(f,a,b,c,d,1000,1000))
+fprintf("%f\n",double_trapezoid(f,a,b,c,d,1000,1000))
 fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 0))
 fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 0.5))
 fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 1))
 
 % fprintf("%f\n",integral(f2,0,5))
 % fprintf("%f\n",simpson(f2,0,5,1e3,0))
-fprintf("%f\n",trapezoid(f2,0,5,1e3,0))
+%fprintf("%f\n",trapezoid(f2,0,5,1e3,0))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,0,0))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,0.5,0))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,1,0))
@@ -88,7 +88,7 @@ h = (b-a)/n;
 s = 0;
 x = a + bias*h;
 
-for i = 1:n-1
+for i = 1:n
     s = s + f(x,y);
     x = x + h;
 end
@@ -102,7 +102,7 @@ k = (d-c)/m;
 t = 0;
 y = c + bias*k;
 
-for i = 1:m-1
+for i = 1:m
     t = t + rectangle_int(f,a,b,n,bias,y);
     y = y + k;
 end
