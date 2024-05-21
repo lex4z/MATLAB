@@ -88,7 +88,7 @@ h = (b-a)/n;
 s = 0;
 x = a + bias*h;
 
-for i = 1:n
+for i = 1:n-1
     s = s + f(x,y);
     x = x + h;
 end
@@ -102,11 +102,10 @@ k = (d-c)/m;
 t = 0;
 y = c + bias*k;
 
-for i = 1:m
+for i = 1:m-1
     t = t + rectangle_int(f,a,b,n,bias,y);
     y = y + k;
 end
-
 
 result = t*k;
 end
