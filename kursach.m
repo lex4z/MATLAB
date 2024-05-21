@@ -1,12 +1,21 @@
 clear
 clc
-f = @(x,y) x.^3 + x.*y + y.^3 -7./(x.*y);
-f2 = @(x) x.^2 - x + sqrt(x);
 
-integral2(f,1,6,2,4.5)
-double_simpson(f,1,6,2,4.5,100,100)
+a = 2;
+b = 4.5;
+c = 1;
+d = 6;
+
+f = @(x,y) x.^3 + x.*y + y.^3 -7./(x.*y);
+f2 = @(x,y) x.^2 - x + sqrt(x);
+
+fprintf("%e\n",integral2(f,a,b,c,d))
+fprintf("%e\n",double_simpson(f,a,b,c,d,100,100))
+fprintf("%e\n",double_trapezoid(f,a,b,c,d,1000,1000))
+
 %integral(f2,0,5)
-%simpson(f2,0,5,1e3)
+%simpson(f2,0,5,1e3,0)
+%trapezoid(f2,0,5,1e3,0)
 
 function result = simpson(f,a,b,n,y)
 n = n + mod(n,2);
@@ -44,12 +53,29 @@ result = g*k/3;
 
 end
 
-function result = trapezoid(f, a, b, n)
+function result = trapezoid(f, a, b, n, y)
+h = (b-a)/n;
+s = 0.5*(f(a,y)+f(b,y));
+for i = 1:n
+    s = s + f(a + i*h,y);
+end
 
+result = s * h;
 
 end
 
-function result = rectangle(f, a, b, n, type)
+
+function result = double_trapezoid(f, a, b, c, d, n, m)
+k = (d-c)/m;
+t = 0.5*(trapezoid(f,a,b,n,c) + trapezoid(f,a,b,n,d));
+for j = 1:m
+    t = t + trapezoid(f,a,b,n,c + j*k);
+end
+
+result = t * k;
+
+end
+function result = double_rectangle(f, a, b, n, type)
 %type = left, right, central
 
 end
