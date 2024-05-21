@@ -75,7 +75,7 @@ end
 result = t * k;
 
 end
-function result = double_rectangle(f, a, b, n, type)
-%type = left, right, central
+function result = double_rectangle(f, a, b, n, bias)
+%bias = 0 (left), 1 (right), 0.5 (central)
 
 end
