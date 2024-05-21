@@ -65,8 +65,7 @@ s = 0.5*(f(a,y)+f(b,y));
 for i = 1:n-1
     s = s + f(a + i*h,y);
 end
-disp(a + i*h)
-disp(i)
+
 result = s * h;
 
 end
