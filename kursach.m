@@ -23,7 +23,10 @@ fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 1))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,0.5,0))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,1,0))
 
-[I,n] = runge(f,a,b,c,d,1e3, 1e-4,@double_rectangle,0.5)
+[I,n] = runge(f,a,b,c,d,1e3, 1e-8,@double_simpson);
+disp(vpa(integral2(f,a,b,c,d),16))
+disp(vpa(I,16))
+
 
 function [result,n] = runge(f, a, b, c, d, n, eps, integr, bias)
 
@@ -44,7 +47,7 @@ for j = 1:1e6
 
     
     t = abs(i1-i2);
-    if(t<=eps)
+    if(t <= eps)
         break
     end
     n = n*2;
