@@ -28,6 +28,8 @@ disp(vpa(integral2(f,a,b,c,d),16))
 disp(vpa(I,16))
 
 
+
+%% правило Рунге
 function [result,n] = runge(f, a, b, c, d, n, eps, integr, bias)
 
 flag = 0;
@@ -38,14 +40,13 @@ end
 t = 1e5;
 i2 = 0;
 
-for j = 1:1e6
+for j = 1:1e3
     if flag == 1
         i1 = integr(f,a,b,c,d,n/2,n/2,bias);
     else
         i1 = integr(f,a,b,c,d,n/2,n/2);
     end
 
-    
     t = abs(i1-i2);
     if(t <= eps)
         break
@@ -58,6 +59,8 @@ result = i1 + (i1-i2)/15;
 
 end
 
+
+%% метод Симпсона 
 function result = simpson(f,a,b,n,y)
 n = n + mod(n,2);
 h = (b-a)/n;
@@ -74,6 +77,8 @@ end
 
 result = h/3*s;
 end
+
+
 
 function result = double_simpson(f, a, b, c, d, n, m)
 m = m + mod(m,2);
@@ -94,6 +99,8 @@ result = g*k/3;
 
 end
 
+
+%% метод трапеций
 function result = trapezoid(f, a, b, n, y)
 h = (b-a)/n;
 s = 0.5*(f(a,y)+f(b,y));
@@ -104,6 +111,7 @@ end
 result = s * h;
 
 end
+
 
 
 function result = double_trapezoid(f, a, b, c, d, n, m)
@@ -117,6 +125,8 @@ result = t * k;
 
 end
 
+
+%% метод прямоугольников
 function result = rectangle_int(f, a, b, n, bias, y)
 %bias = 0 (left), 1 (right), 0.5 (central)
 h = (b-a)/n;
@@ -131,6 +141,9 @@ end
 result = s*h;
 
 end
+
+
+
 function result = double_rectangle(f, a, b, c, d, n, m, bias)
 %bias = 0 (left), 1 (right), 0.5 (central)
 k = (d-c)/m;
