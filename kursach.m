@@ -1,5 +1,5 @@
-clear
 clc
+clear
 
 a = 1;
 b = 6;
@@ -18,10 +18,42 @@ fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 1))
 
 % fprintf("%f\n",integral(f2,0,5))
 % fprintf("%f\n",simpson(f2,0,5,1e3,0))
-%fprintf("%f\n",trapezoid(f2,0,5,1e3,0))
+% fprintf("%f\n",trapezoid(f2,0,5,1e3,0))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,0,0))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,0.5,0))
 % fprintf("%f\n",rectangle_int(f2,0,5,1e3,1,0))
+
+[I,n] = runge(f,a,b,c,d,1e3, 1e-4,@double_rectangle,0.5)
+
+function [result,n] = runge(f, a, b, c, d, n, eps, integr, bias)
+
+flag = 0;
+if nargin == 9
+    flag = 1;
+end
+
+t = 1e5;
+i2 = 0;
+
+for j = 1:1e6
+    if flag == 1
+        i1 = integr(f,a,b,c,d,n/2,n/2,bias);
+    else
+        i1 = integr(f,a,b,c,d,n/2,n/2);
+    end
+
+    
+    t = abs(i1-i2);
+    if(t<=eps)
+        break
+    end
+    n = n*2;
+    i2 = i1;
+end
+
+result = i1 + (i1-i2)/15;
+
+end
 
 function result = simpson(f,a,b,n,y)
 n = n + mod(n,2);
