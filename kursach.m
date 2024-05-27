@@ -10,7 +10,7 @@ f = @(x,y) x.^3 + x.*y + y.^3 -7./(x.*y);
 I_real = 1433.96968174788;
 
 
-eps = [1e3,1e2,1e1,1e0,1e-1];
+eps = [1e2,1e1,1e0,1e-1,1e-2];
 n = [10,50,100,500,1000];
 
 j = 1;
@@ -64,13 +64,6 @@ for i = 1:length(eps)
 end
 writematrix(RES,"KURSACH.xlsx")
 
-[I,n,epsf] = runge(f,a,b,c,d,100, 1e5,@double_simpson);
-disp(vpa(I,16))
-disp(vpa(epsf,16))
-disp(vpa(1000+1e-8,16))
-disp(n)
-
-
 %% правило Рунге
 function [result,n,t] = runge(f, a, b, c, d, n, eps, integr, k, bias)
 
@@ -94,7 +87,7 @@ for j = 1:1e3
         i1 = integr(f,a,b,c,d,n,n);
     end
 
-    t = abs(i1-i2)/(2^k-1);
+    t = abs(i1-i2);
     if(t <= eps)
         break
     end
