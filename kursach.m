@@ -10,7 +10,7 @@ f = @(x,y) x.^3 + x.*y + y.^3 -7./(x.*y);
 I_real = 1433.96968174788;
 
 
-eps = [1e3,1e2,1e1,1e-1,1e-2];
+eps = [1e3,1e2,1e1,1e0,1e-1];
 n = [10,50,100,500,1000];
 
 j = 1;
@@ -63,15 +63,6 @@ for i = 1:length(eps)
     j = j + 1;
 end
 writematrix(RES,"KURSACH.xlsx")
-
-
-
-fprintf("%f\n",integral2(f,a,b,c,d))
-fprintf("%f\n",double_simpson(f,a,b,c,d,100,100))
-fprintf("%f\n",double_trapezoid(f,a,b,c,d,1000,1000))
-fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 0))
-fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 0.5))
-fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 1))
 
 [I,n,epsf] = runge(f,a,b,c,d,100, 1e5,@double_simpson);
 disp(vpa(I,16))
