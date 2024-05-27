@@ -6,20 +6,23 @@ b = 6;
 c = 2;
 d = 4.5;
 
-f = @(x,y) x.^3 + x.*y + y.^3 -7./(x.*y);
+f = @(x,y)  x.^3 + x.*y + y.^3 -7./(x.*y);
+
+f2 = @(x) x.^3 - log(x) + 1./x;
+
 I_real = 1433.96968174788;
 
 
 eps = [1e2,1e1,1e0,1e-1,1e-2];
 n = [10,50,100,500,1000];
 
-j = 1;
+j = 2;
 
 for i = 1:length(eps)
     
     disp(j)
     
-    [I1,n1,~] = runge(f,a,b,c,d,4,eps(i),@double_simpson,4);
+    [I1,n1,~] = runge(f,a,b,c,d,4,eps(i),@double_simpson,2);
     [I2,n2,~] = runge(f,a,b,c,d,4,eps(i),@double_trapezoid,2);
     [I3,n3,~] = runge(f,a,b,c,d,4,eps(i),@double_rectangle,1,0);
     [I4,n4,~] = runge(f,a,b,c,d,4,eps(i),@double_rectangle,1,1);
@@ -59,6 +62,26 @@ for i = 1:length(eps)
     RES(j,35) = vpa(I4,8);
     RES(j,36) = vpa(I5,8);
 
+    RES(j,41) = n(i);
+    RES(j,42) = vpa(I12,8)-I_real;
+    RES(j,43) = vpa(I22,8)-I_real;
+    RES(j,44) = vpa(I32,8)-I_real;
+    RES(j,45) = vpa(I42,8)-I_real;
+    RES(j,46) = vpa(I52,8)-I_real;
+
+    RES(j,51) = eps(i);
+    RES(j,52) = vpa(I1,8)-I_real;
+    RES(j,53) = vpa(I2,8)-I_real;
+    RES(j,54) = vpa(I3,8)-I_real;
+    RES(j,55) = vpa(I4,8)-I_real;
+    RES(j,56) = vpa(I5,8)-I_real;
+
+    RES(j,61) = eps(i);
+    RES(j,62) = runge(f,a,b,c,d,n1/2,1e5,@double_simpson,4);
+    RES(j,63) = runge(f,a,b,c,d,n2/2,1e5,@double_trapezoid,2);
+    RES(j,64) = runge(f,a,b,c,d,n3/2,1e5,@double_rectangle,1,0);
+    RES(j,65) = runge(f,a,b,c,d,n4/2,1e5,@double_rectangle,1,1);
+    RES(j,66) = runge(f,a,b,c,d,n5/2,1e5,@double_rectangle,2,0.5);
 
     j = j + 1;
 end
@@ -71,10 +94,10 @@ flag = 0;
 if nargin == 10
     flag = 1;
 end
-
+n0 = n;
 t = 1e5;
 if flag == 1
-    i2 = integr(f,a,b,c,d,n/2,n/2,bias);
+    i2 = integr(f,a,b,c,d,n/2,100,bias);
 else
     i2 = integr(f,a,b,c,d,n/2,n/2);
 end
@@ -82,12 +105,12 @@ end
 
 for j = 1:1e3
     if flag == 1
-        i1 = integr(f,a,b,c,d,n,n,bias);
+        i1 = integr(f,a,b,c,d,n,100,bias);
     else
         i1 = integr(f,a,b,c,d,n,n);
     end
 
-    t = abs(i1-i2);
+    t = abs(i1-i2)/(2^k-1);
     if(t <= eps)
         break
     end
@@ -173,7 +196,7 @@ h = (b-a)/n;
 s = 0;
 x = a + bias*h;
 
-for i = 1:n
+for i = 0:n-1
     s = s + f(x,y);
     x = x + h;
 end
@@ -190,7 +213,7 @@ k = (d-c)/m;
 t = 0;
 y = c + bias*k;
 
-for i = 1:m
+for i = 0:m-1
     t = t + rectangle_int(f,a,b,n,bias,y);
     y = y + k;
 end
