@@ -7,7 +7,64 @@ c = 2;
 d = 4.5;
 
 f = @(x,y) x.^3 + x.*y + y.^3 -7./(x.*y);
-f2 = @(x,y) x.^2 - x + sqrt(x);
+I_real = 1433.96968174788;
+
+
+eps = [1e3,1e2,1e1,1e-1,1e-2];
+n = [10,50,100,500,1000];
+
+j = 1;
+
+for i = 1:length(eps)
+    
+    disp(j)
+    
+    [I1,n1,~] = runge(f,a,b,c,d,4,eps(i),@double_simpson,4);
+    [I2,n2,~] = runge(f,a,b,c,d,4,eps(i),@double_trapezoid,2);
+    [I3,n3,~] = runge(f,a,b,c,d,4,eps(i),@double_rectangle,1,0);
+    [I4,n4,~] = runge(f,a,b,c,d,4,eps(i),@double_rectangle,1,1);
+    [I5,n5,~] = runge(f,a,b,c,d,4,eps(i),@double_rectangle,2,0.5);
+
+    [I12,~,epsf1] = runge(f,a,b,c,d,n(i),1e5,@double_simpson,4);
+    [I22,~,epsf2] = runge(f,a,b,c,d,n(i),1e5,@double_trapezoid,2);
+    [I32,~,epsf3] = runge(f,a,b,c,d,n(i),1e5,@double_rectangle,1,0);
+    [I42,~,epsf4] = runge(f,a,b,c,d,n(i),1e5,@double_rectangle,1,1);
+    [I52,~,epsf5] = runge(f,a,b,c,d,n(i),1e5,@double_rectangle,2,0.5);
+
+    RES(j,1) = n(i);
+    RES(j,2) = epsf1;
+    RES(j,3) = epsf2;
+    RES(j,4) = epsf3;  
+    RES(j,5) = epsf4;
+    RES(j,6) = epsf5;
+
+    RES(j,11) = eps(i);
+    RES(j,12) = n1;
+    RES(j,13) = n2;
+    RES(j,14) = n3;
+    RES(j,15) = n4;
+    RES(j,16) = n5;
+
+    RES(j,21) = n(i);
+    RES(j,22) = vpa(I12,8);
+    RES(j,23) = vpa(I22,8);
+    RES(j,24) = vpa(I32,8);
+    RES(j,25) = vpa(I42,8);
+    RES(j,26) = vpa(I52,8);
+
+    RES(j,31) = eps(i);
+    RES(j,32) = vpa(I1,8);
+    RES(j,33) = vpa(I2,8);
+    RES(j,34) = vpa(I3,8);
+    RES(j,35) = vpa(I4,8);
+    RES(j,36) = vpa(I5,8);
+
+
+    j = j + 1;
+end
+writematrix(RES,"KURSACH.xlsx")
+
+
 
 fprintf("%f\n",integral2(f,a,b,c,d))
 fprintf("%f\n",double_simpson(f,a,b,c,d,100,100))
@@ -16,38 +73,37 @@ fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 0))
 fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 0.5))
 fprintf("%f\n",double_rectangle(f,a,b,c,d,1000,1000, 1))
 
-% fprintf("%f\n",integral(f2,0,5))
-% fprintf("%f\n",simpson(f2,0,5,1e3,0))
-% fprintf("%f\n",trapezoid(f2,0,5,1e3,0))
-% fprintf("%f\n",rectangle_int(f2,0,5,1e3,0,0))
-% fprintf("%f\n",rectangle_int(f2,0,5,1e3,0.5,0))
-% fprintf("%f\n",rectangle_int(f2,0,5,1e3,1,0))
-
-[I,n] = runge(f,a,b,c,d,1e3, 1e-8,@double_simpson);
-disp(vpa(integral2(f,a,b,c,d),16))
+[I,n,epsf] = runge(f,a,b,c,d,100, 1e5,@double_simpson);
 disp(vpa(I,16))
-
+disp(vpa(epsf,16))
+disp(vpa(1000+1e-8,16))
+disp(n)
 
 
 %% правило Рунге
-function [result,n] = runge(f, a, b, c, d, n, eps, integr, bias)
+function [result,n,t] = runge(f, a, b, c, d, n, eps, integr, k, bias)
 
 flag = 0;
-if nargin == 9
+if nargin == 10
     flag = 1;
 end
 
 t = 1e5;
-i2 = 0;
+if flag == 1
+    i2 = integr(f,a,b,c,d,n/2,n/2,bias);
+else
+    i2 = integr(f,a,b,c,d,n/2,n/2);
+end
+
 
 for j = 1:1e3
     if flag == 1
-        i1 = integr(f,a,b,c,d,n/2,n/2,bias);
+        i1 = integr(f,a,b,c,d,n,n,bias);
     else
-        i1 = integr(f,a,b,c,d,n/2,n/2);
+        i1 = integr(f,a,b,c,d,n,n);
     end
 
-    t = abs(i1-i2);
+    t = abs(i1-i2)/(2^k-1);
     if(t <= eps)
         break
     end
