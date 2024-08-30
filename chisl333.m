@@ -117,7 +117,7 @@ for i = 1:size(H,3)
         obp = cond(Ap);
         rp = norm(Ap*xp-b);
         errp = norm(x0-xp);
-        err_estp = obp*r/norm(b);
+        err_estp = obp*rp/norm(b);
         err_est2 = err_estp + norm(P);
 
         RES(l,1) = i;
